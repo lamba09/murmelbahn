@@ -7,8 +7,8 @@ class ServoControlBoard(object):
     def __init__(self):
         self.pwm = Adafruit_PCA9685.PCA9685()
         self.pwm.set_pwm_freq(60)
-        self.servo_min = 150  # Min pulse length out of 4096
-        self.servo_max = 600  # Max pulse length out of 4096
+        self.servo_min = 160  # Min pulse length out of 4096
+        self.servo_max = 420  # Max pulse length out of 4096
 
     def set_servo_pulse(self, channel, pulse):
         pulse_length = 1000000  # 1,000,000 us per second
@@ -23,3 +23,31 @@ class ServoControlBoard(object):
     def move(self, pos):
         assert self.servo_min <= pos <= self.servo_max
         self.pwm.set_pwm(0, 0, pos)
+
+class Servo(Object):
+
+    def __init__(self, channel):
+        self._channel = channel
+        self._reverse = False
+        self._min_pw = 160
+        self._max_pw = 420
+        self.pwm = Adafruit_PCA9685.PCA9685()
+        self.pwm.set_pwm_freq(60)
+
+    def auf(self):
+        self.pwm.set_pwm(self._channel, 0, self._max_pw)
+
+    def zu(self):
+        self.pwm.set_pwm(self._channel, 0, self._min_pw)
+
+
+class Blocker(Servo):
+
+    def __init__(self, channel):
+        super(Blocker, self).__init__(channel)
+
+class Weiche(Servo):
+
+     def __init__(self, channel):
+         super(Weiche, self).__init__(channel)
+         self._min_pw, self._max_pw = self._max_pw, self._min_pw
