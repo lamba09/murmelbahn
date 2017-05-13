@@ -11,16 +11,28 @@ class Servo(object):
         self._pwm = Adafruit_PCA9685.PCA9685()
         self._pwm.set_pwm_freq(60)
         self._sleep = 0.3
+        self._ist_auf = None
 
     def auf(self, warten=True):
         self._pwm.set_pwm(self._channel, 0, self._max_pw)
         if warten:
             time.sleep(self._sleep)
+        self._ist_auf = True
 
     def zu(self, warten=True):
         self._pwm.set_pwm(self._channel, 0, self._min_pw)
         if warten:
             time.sleep(self._sleep)
+        self._ist_auf = False
+
+    def ist_offen(self):
+        return self._ist_auf
+
+    def switch(self):
+        if self._ist_auf:
+            self.zu()
+        else:
+            self.auf()
 
 a = Servo(0)
 b = Servo(1)
