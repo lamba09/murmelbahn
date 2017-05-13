@@ -21,3 +21,14 @@ class Servo(object):
         self._pwm.set_pwm(self._channel, 0, self._min_pw)
         if warten:
             time.sleep(self._sleep)
+
+a = Servo(0)
+b = Servo(1)
+c = Servo(2)
+d = Servo(3)
+e = Servo(4)
+f = Servo(5)
+g = Servo(6)
+h = Servo(7)
+i = Servo(8)
+j = Servo(9)
